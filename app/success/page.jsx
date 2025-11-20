@@ -23,6 +23,7 @@ async function SuccessContent({ searchParams }) {
   const session = await stripe.checkout.sessions.retrieve(session_id, {
     expand: ["line_items", "payment_intent"],
   });
+  const customer = await stripe.customers.retrieve(session.customer);
 
   if (session.status === "open") {
     return redirect("/protected");
@@ -33,9 +34,9 @@ async function SuccessContent({ searchParams }) {
     return (
       <section id="success">
         <p>
-          We appreciate your business! A confirmation email will be sent to{" "}
-          {customerEmail || "your email"}. If you have any questions, please
-          email{" "}
+          Thank you for your purchase, {customer.name}. A confirmation email
+          will be sent to {customerEmail || "your email"}. If you have any
+          questions, please email{" "}
         </p>
         <a href="mailto:orders@example.com">
           <span className="underline">orders@example.com</span>
