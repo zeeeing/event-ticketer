@@ -1,43 +1,21 @@
-import { AuthButton } from "@/components/auth-button";
-import { Hero } from "@/components/hero";
-import { ThemeSwitcher } from "@/components/theme-switcher";
 import Link from "next/link";
-import { Suspense } from "react";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col items-center">
-      <div className="flex-1 w-full flex flex-col gap-20 items-center">
-        <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-          <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-            <div className="flex gap-5 items-center font-semibold">
-              <ThemeSwitcher />
-              <Link href={"/"}>event ticketer</Link>
-            </div>
-            <Suspense>
-              <AuthButton />
-            </Suspense>
-          </div>
-        </nav>
-
-        <div className="flex-1 flex flex-col gap-20 max-w-5xl p-5 justify-center">
-          <Hero />
-        </div>
-
-        <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
-          <p>
-            Powered by{" "}
-            <a
-              href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-              target="_blank"
-              className="font-bold hover:underline"
-              rel="noreferrer"
-            >
-              Supabase
-            </a>
-          </p>
-        </footer>
+    <div className="flex flex-col gap-16 justify-center items-center">
+      <p className="text-3xl lg:text-4xl !leading-tight mx-auto max-w-2xl text-center">
+        Your express ride straight into any event.
+      </p>
+      <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8" />
+      <div className="flex gap-4">
+        <Button asChild size="lg" variant={"outline"}>
+          <Link href="/auth/login">Sign in</Link>
+        </Button>
+        <Button asChild size="lg" variant={"default"}>
+          <Link href="/auth/sign-up">Sign up</Link>
+        </Button>
       </div>
-    </main>
+    </div>
   );
 }
