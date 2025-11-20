@@ -1,10 +1,13 @@
 import { AuthButton } from "@/components/auth-button";
-import { Hero } from "@/components/hero";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import Link from "next/link";
 import { Suspense } from "react";
 
-export default function Home() {
+export default function ProtectedLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <main className="min-h-screen flex flex-col items-center">
       <div className="flex-1 w-full flex flex-col gap-20 items-center">
@@ -12,7 +15,7 @@ export default function Home() {
           <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
             <div className="flex gap-5 items-center font-semibold">
               <ThemeSwitcher />
-              <Link href={"/"}>event ticketer</Link>
+              <Link href={"/protected"}>event ticketer</Link>
             </div>
             <Suspense>
               <AuthButton />
@@ -20,8 +23,8 @@ export default function Home() {
           </div>
         </nav>
 
-        <div className="flex-1 flex flex-col gap-20 max-w-5xl p-5 justify-center">
-          <Hero />
+        <div className="flex-1 flex flex-col gap-20 max-w-5xl p-5">
+          {children}
         </div>
 
         <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">

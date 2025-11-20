@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import { InfoIcon } from "lucide-react";
 import { Suspense } from "react";
 
+import CheckoutButton from "@/components/checkout-button";
+
 async function UserDetails() {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getClaims();
@@ -32,6 +34,7 @@ export default function ProtectedPage() {
             <UserDetails />
           </Suspense>
         </pre>
+        <CheckoutButton />
       </div>
     </div>
   );
