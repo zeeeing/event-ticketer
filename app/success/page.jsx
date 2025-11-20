@@ -1,8 +1,19 @@
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 import { stripe } from "@/lib/stripe";
 
-export default async function SuccessPage({ searchParams }) {
+export default function SuccessPage({ searchParams }) {
+  return (
+    <Suspense
+      fallback={<section id="success">Loading your receipt...</section>}
+    >
+      <SuccessContent searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+async function SuccessContent({ searchParams }) {
   const { session_id } = await searchParams;
 
   if (!session_id) {
