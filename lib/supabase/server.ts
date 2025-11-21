@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import type { JwtPayload } from "@supabase/supabase-js";
 
 /**
  * Especially important if using Fluid compute: Don't put this client in a
@@ -20,7 +21,7 @@ export async function createClient() {
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options),
+              cookieStore.set(name, value, options)
             );
           } catch {
             // The `setAll` method was called from a Server Component.
@@ -29,6 +30,18 @@ export async function createClient() {
           }
         },
       },
-    },
+    }
   );
+}
+
+export async function getUser(): Promise<JwtPayload | null> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.auth.getClaims();
+
+  if (error || !data?.claims) {
+    return null;
+  }
+
+  return data.claims;
 }

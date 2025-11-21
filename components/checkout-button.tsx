@@ -6,7 +6,7 @@ function CheckoutButton() {
       <form action="/api/checkout_sessions" method="POST">
         <section>
           <Button type="submit" role="link">
-            Buy Ticket
+            Purchase Event Ticket
           </Button>
         </section>
       </form>

@@ -26,7 +26,7 @@ async function SuccessContent({ searchParams }) {
   const customer = await stripe.customers.retrieve(session.customer);
 
   if (session.status === "open") {
-    return redirect("/protected");
+    return redirect("/");
   }
 
   if (session.status === "complete") {
@@ -46,5 +46,5 @@ async function SuccessContent({ searchParams }) {
     );
   }
 
-  return redirect("/protected");
+  return redirect("/");
 }
