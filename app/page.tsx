@@ -6,6 +6,7 @@ import { UserDetails } from "@/components/user-details";
 import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/supabase/server";
 import { JwtPayload } from "@supabase/supabase-js";
+import { Suspense } from "react";
 
 function PublicHome() {
   return (
@@ -37,16 +38,18 @@ function AuthenticatedHome({ user }: { user: JwtPayload }) {
       </div>
       <div className="flex flex-col gap-6 items-start">
         <h2 className="font-bold text-2xl">Your user details</h2>
-        <UserDetails user={user} />
-        <div className="flex w-full justify-center">
-          <CheckoutButton />
-        </div>
+        <Suspense>
+          <UserDetails user={user} />
+        </Suspense>
+      </div>
+      <div className="flex w-full justify-center">
+        <CheckoutButton />
       </div>
     </div>
   );
 }
 
-export default async function HomePage() {
+async function HomeContent() {
   const user = await getUser();
 
   if (user) {
@@ -54,4 +57,20 @@ export default async function HomePage() {
   }
 
   return <PublicHome />;
+}
+
+export default function HomePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full flex justify-center">
+          <p className="text-sm text-muted-foreground">
+            Loading your experience...
+          </p>
+        </div>
+      }
+    >
+      <HomeContent />
+    </Suspense>
+  );
 }
