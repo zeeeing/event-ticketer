@@ -11,7 +11,7 @@ import { Suspense } from "react";
 
 function PublicHome() {
   return (
-    <div className="flex flex-col gap-16 justify-center items-center">
+    <div className="flex flex-col flex-1 gap-16 justify-center items-center">
       <p className="text-3xl lg:text-4xl !leading-tight mx-auto max-w-2xl text-center">
         Your <em>express</em> ride into any event.
       </p>
