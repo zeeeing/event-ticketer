@@ -29,6 +29,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
-, "lib/stripe.js"  ],
+, "lib/stripe.ts"  ],
   "exclude": ["node_modules"]
 }

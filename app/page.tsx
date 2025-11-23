@@ -2,6 +2,7 @@ import { InfoIcon } from "lucide-react";
 import Link from "next/link";
 
 import CheckoutButton from "@/components/checkout-button";
+import OrderHistoryButton from "@/components/order-history-button";
 import { UserDetails } from "@/components/user-details";
 import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/supabase/server";
@@ -42,8 +43,9 @@ function AuthenticatedHome({ user }: { user: JwtPayload }) {
           <UserDetails user={user} />
         </Suspense>
       </div>
-      <div className="flex w-full justify-center">
+      <div className="flex flex-col w-full items-center gap-4">
         <CheckoutButton />
+        <OrderHistoryButton />
       </div>
     </div>
   );
