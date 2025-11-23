@@ -5,11 +5,14 @@ import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/supabase/server";
 import { fetchOrdersByUser } from "@/lib/stripe";
 
-export default async function OrderHistoryPage() {
+export default function OrderHistoryPage() {
   return (
-    <Suspense>
-      <OrderHistoryContent />
-    </Suspense>
+    <div className="flex flex-col gap-6 w-[600px]">
+      <h1 className="text-3xl font-semibold">Order History</h1>
+      <Suspense fallback={<p>Loading order history...</p>}>
+        <OrderHistoryContent />
+      </Suspense>
+    </div>
   );
 }
 
@@ -19,15 +22,10 @@ async function OrderHistoryContent() {
 
   const data = await fetchOrdersByUser(customerEmail);
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-2">
-        <h1 className="text-3xl font-semibold">Order history</h1>
-        <Suspense>
-          <p className="text-sm text-muted-foreground">
-            Viewing orders for <span className="font-bold">{user?.email}</span>
-          </p>
-        </Suspense>
-      </header>
+    <>
+      <p className="text-sm text-muted-foreground">
+        Viewing orders for <span className="font-bold">{user?.email}</span>
+      </p>
 
       <pre className="text-xs font-mono p-3 rounded border max-h-64 w-full overflow-auto">
         {JSON.stringify(data, null, 2)}
@@ -90,6 +88,6 @@ async function OrderHistoryContent() {
           })}
         </div>
       )}
-    </div>
+    </>
   );
 }
