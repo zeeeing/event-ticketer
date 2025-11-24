@@ -14,7 +14,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "golden tikkee",
+  title: "Golden Tikkee",
   description: "Your express ride into any event.",
 };
 
@@ -44,7 +44,7 @@ export default function RootLayout({
               <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
                 <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
                   <div className="flex gap-5 items-center font-semibold">
-                    <Link href={"/"}>golden tikkee</Link>
+                    <Link href={"/"}>Golden Tikkee</Link>
                   </div>
                   <div className="flex gap-4 items-center">
                     <Suspense>

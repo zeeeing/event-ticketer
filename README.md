@@ -1,15 +1,20 @@
 # Golden Tikkee
 
-Payments application showcasing Supabase-authenticated checkout, Stripe payment flows with webhook fulfillment, and QR-coded tickets delivered via email and the in-app wallet.
+Event ticketing platform showcasing Supabase-authenticated checkout, Stripe payment flows with webhook fulfillment, and QR-coded tickets delivered via email and the in-app wallet.
 
 ## Core Features
 
-- Auth + guarded flows: Supabase email/password (signup/confirm/reset) with `@supabase/ssr` cookies protecting checkout and wallet routes
-- Secure payments: Stripe Checkout for signed-in users; success page validates the session ID before showing receipt details
-- Webhook fulfillment: signature-verified Stripe webhook writes tickets to Supabase (RLS), generates QR codes, and emails them via Nodemailer + Gmail
-- Ticket wallet + QR: carousel renders QR codes client-side with purchase metadata and status badges
-- Order history: pulls Stripe Checkout Sessions for the signed-in user's email for receipt tracing
-- UI/Theme: Tailwind + shadcn/ui with light/dark toggle; Embla carousel and lucide icons for the wallet experience
+- **Auth + guarded flows** - Supabase email/password (signup, confirm, reset) with `@supabase/ssr` cookies; checkout and wallet routes require sign-in.
+
+- **Checkout + receipt validation** - Stripe Checkout for authenticated users; success page verifies the session ID before showing the receipt.
+
+- **Webhook fulfillment** - Signature-verified Stripe webhook writes tickets to Supabase (RLS), generates QR codes, and emails them via Nodemailer + Gmail.
+
+- **Ticket wallet + QR** - Carousel renders QR codes client-side with purchase metadata, status badges, and Stripe session references.
+
+- **Order history + receipts** - Pulls Stripe Checkout Sessions tied to the signed-in user's email for traceable orders.
+
+- **UI/Theme** - Tailwind + shadcn/ui with light/dark toggle; Embla carousel and lucide icons for the wallet experience.
 
 ## Services Used
 
@@ -35,11 +40,11 @@ Docs: https://nextjs.org/docs
 
 ## System Flow
 
-1) User signs up or signs in (Supabase Auth; cookies via `@supabase/ssr`).  
-2) Authenticated user starts Stripe Checkout; session creation enforces login and embeds user metadata.  
-3) On payment success, the Stripe webhook (signature-verified) writes a ticket to Supabase with service-role, generates a QR code, and emails it.  
-4) Home wallet fetches user tickets from Supabase (RLS) and renders QR codes client-side.  
-5) Order history queries Stripe Checkout Sessions for the user's email to provide receipts and statuses.
+1. User signs up or signs in (Supabase Auth; cookies via `@supabase/ssr`).
+2. Authenticated user starts Stripe Checkout; session creation enforces login and embeds user metadata.
+3. On payment success, the Stripe webhook (signature-verified) writes a ticket to Supabase with service-role, generates a QR code, and emails it.
+4. Home wallet fetches user tickets from Supabase (RLS) and renders QR codes client-side.
+5. Order history queries Stripe Checkout Sessions for the user's email to provide receipts and statuses.
 
 ## Quickstart
 
@@ -51,8 +56,8 @@ Docs: https://nextjs.org/docs
 
 ## Testing Guidance
 
-- Manual paths: auth (signup/login/reset), checkout with `4242 4242 4242 4242`, webhook fulfillment (ticket created, email received), wallet QR render, order history fetch.  
-- Webhook: verify signature errors fail fast; rerun with `stripe listen` to confirm insertion + email.  
+- Manual paths: auth (signup/login/reset), checkout with `4242 4242 4242 4242`, webhook fulfillment (ticket created, email received), wallet QR render, order history fetch.
+- Webhook: verify signature errors fail fast; rerun with `stripe listen` to confirm insertion + email.
 - If you add idempotency keys or retries, include logs/metrics for webhook execution outcomes.
 
 ## Local Development
