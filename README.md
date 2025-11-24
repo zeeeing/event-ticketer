@@ -1,109 +1,92 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# Golden Tikkee
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+Payments application showcasing Supabase-authenticated checkout, Stripe payment flows with webhook fulfillment, and QR-coded tickets delivered via email and the in-app wallet.
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+## Core Features
 
-## Features
+- Auth + guarded flows: Supabase email/password (signup/confirm/reset) with `@supabase/ssr` cookies protecting checkout and wallet routes
+- Secure payments: Stripe Checkout for signed-in users; success page validates the session ID before showing receipt details
+- Webhook fulfillment: signature-verified Stripe webhook writes tickets to Supabase (RLS), generates QR codes, and emails them via Nodemailer + Gmail
+- Ticket wallet + QR: carousel renders QR codes client-side with purchase metadata and status badges
+- Order history: pulls Stripe Checkout Sessions for the signed-in user's email for receipt tracing
+- UI/Theme: Tailwind + shadcn/ui with light/dark toggle; Embla carousel and lucide icons for the wallet experience
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Proxy
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Password-based authentication block installed via the [Supabase UI Library](https://supabase.com/ui/docs/nextjs/password-based-auth)
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+## Services Used
 
-## Demo
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat&logo=supabase&logoColor=white)  
+Auth, RLS-protected `tickets` table, server-side queries, cookie-based sessions  
+Docs: https://supabase.com/docs
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+![Stripe](https://img.shields.io/badge/Stripe-635BFF?style=flat&logo=stripe&logoColor=white)  
+Checkout Sessions, signature-verified webhook, receipt verification  
+Docs: https://docs.stripe.com
 
-## Deploy to Vercel
+![Nodemailer + Gmail](https://img.shields.io/badge/Nodemailer%20%2B%20Gmail-D14836?style=flat&logo=gmail&logoColor=white)  
+Sends QR tickets to the purchaser's email  
+Docs: https://nodemailer.com/about/ and https://developers.google.com/gmail/api
 
-Vercel deployment will guide you through creating a Supabase account and project.
+![Node QRCode](https://img.shields.io/badge/Node_QRCode-000000?style=flat)  
+Generates both emailed and in-app QR codes  
+Docs: https://github.com/soldair/node-qrcode
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white)  
+App Router, server components, and API routes  
+Docs: https://nextjs.org/docs
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+## System Flow
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+1) User signs up or signs in (Supabase Auth; cookies via `@supabase/ssr`).  
+2) Authenticated user starts Stripe Checkout; session creation enforces login and embeds user metadata.  
+3) On payment success, the Stripe webhook (signature-verified) writes a ticket to Supabase with service-role, generates a QR code, and emails it.  
+4) Home wallet fetches user tickets from Supabase (RLS) and renders QR codes client-side.  
+5) Order history queries Stripe Checkout Sessions for the user's email to provide receipts and statuses.
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+## Quickstart
 
-## Clone and run locally
+1. Visit `https://golden-tikkee.vercel.app`.
+2. Sign up with your own email (needed to receive the QR ticket).
+3. Complete checkout using the Stripe test card `4242 4242 4242 4242` (any future expiry, any CVC, any ZIP).
+4. You will be redirected to a success page where you can view the receipt on `/success?session_id=...`.
+5. Check your inbox for the QR ticket, see it in the home wallet, and review `/order_history` for your Stripe transaction.
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+## Testing Guidance
 
-2. Create a Next.js app using the Supabase Starter template npx command
+- Manual paths: auth (signup/login/reset), checkout with `4242 4242 4242 4242`, webhook fulfillment (ticket created, email received), wallet QR render, order history fetch.  
+- Webhook: verify signature errors fail fast; rerun with `stripe listen` to confirm insertion + email.  
+- If you add idempotency keys or retries, include logs/metrics for webhook execution outcomes.
 
+## Local Development
+
+1. **Install dependencies**
    ```bash
-   npx create-next-app --example with-supabase with-supabase-app
+   npm install
    ```
-
+2. **Create environment file** (`.env.local`)
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_or_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+   STRIPE_SECRET_KEY=sk_test_...
+   STRIPE_WEBHOOK_SECRET=whsec_...
+   GMAIL_USER=you@example.com
+   GMAIL_PASS=your_app_password_or_smtp_secret
+   ```
+   - Replace the Stripe Price ID in `app/api/checkout_sessions/route.ts` (`price: "price_..."`) with your product price from the Stripe Dashboard.
+3. **Provision Supabase**
+   - Run `lib/supabase/init.sql` in the Supabase SQL editor to create `tickets` and its RLS policy.
+4. **Stripe webhook (local)**
    ```bash
-   yarn create next-app --example with-supabase with-supabase-app
+   stripe listen --forward-to http://localhost:3000/api/webhooks/stripe
    ```
-
-   ```bash
-   pnpm create next-app --example with-supabase with-supabase-app
-   ```
-
-3. Use `cd` to change into the app's directory
-
-   ```bash
-   cd with-supabase-app
-   ```
-
-4. Rename `.env.example` to `.env.local` and update the following:
-
-  ```env
-  NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=[INSERT SUPABASE PROJECT API PUBLISHABLE OR ANON KEY]
-  ```
-  > [!NOTE]
-  > This example uses `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, which refers to Supabase's new **publishable** key format.
-  > Both legacy **anon** keys and new **publishable** keys can be used with this variable name during the transition period. Supabase's dashboard may show `NEXT_PUBLIC_SUPABASE_ANON_KEY`; its value can be used in this example.
-  > See the [full announcement](https://github.com/orgs/supabase/discussions/29260) for more information.
-
-  Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` can be found in [your Supabase project's API settings](https://supabase.com/dashboard/project/_?showConnect=true)
-
-5. You can now run the Next.js local development server:
-
+   - Copy the `whsec_...` into `STRIPE_WEBHOOK_SECRET`.
+5. **Run the app**
    ```bash
    npm run dev
    ```
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+## Key Files
 
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
-
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
-
-## Feedback and issues
-
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
-
-## More Supabase examples
-
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+- `app/page.tsx`: Wallet and entry points to checkout/order history
+- `app/api/checkout_sessions/route.ts`: Auth-guarded Stripe Checkout session creator
+- `app/api/webhooks/stripe/route.ts`: Signature-checked webhook that writes tickets, generates QR, and emails them
+- `lib/supabase/init.sql`: Ticket schema + RLS
