@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { createClient } from "@supabase/supabase-js";
 
-// This replaces: const endpointSecret = "whsec_...";
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(req: Request) {
@@ -12,7 +11,6 @@ export async function POST(req: Request) {
   const body = await req.text();
 
   // 2. Get the Signature
-  // In Express: request.headers['stripe-signature']
   const sig = req.headers.get("stripe-signature") as string;
 
   let event;
@@ -29,7 +27,6 @@ export async function POST(req: Request) {
   }
 
   // 4. Handle the Event (The Switch Statement)
-  // This structure mimics the official docs exactly.
   switch (event.type) {
     case "checkout.session.completed":
       const session = event.data.object;
@@ -48,7 +45,6 @@ export async function POST(req: Request) {
   return NextResponse.json({ received: true });
 }
 
-// Helper function to keep the main route clean (Optional, but cleaner)
 async function fulfillOrder(session: any) {
   const { userId } = session.metadata;
 

@@ -4,7 +4,7 @@
 create table public.tickets (
   id uuid default gen_random_uuid() primary key,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
-  -- Link DIRECTLY to the hidden Supabase auth user
+  -- link DIRECTLY to the hidden Supabase auth user
   user_id uuid references auth.users not null,
   -- payment data
   stripe_session_id text unique,

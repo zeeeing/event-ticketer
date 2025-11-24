@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import type { JwtPayload } from "@supabase/supabase-js";
+import type { TicketRecord } from "@/types/ticket";
 
 /**
  * Especially important if using Fluid compute: Don't put this client in a
@@ -44,4 +45,29 @@ export async function getUser(): Promise<JwtPayload | null> {
   }
 
   return data.claims;
+}
+
+export async function fetchTicketsForUser(
+  userId?: string
+): Promise<TicketRecord[]> {
+  if (!userId) {
+    return [];
+  }
+
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("tickets")
+    .select(
+      "id, created_at, user_id, stripe_session_id, amount_paid, ticket_code, status"
+    )
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching tickets for user", error);
+    return [];
+  }
+
+  return data ?? [];
 }

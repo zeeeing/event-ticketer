@@ -15,7 +15,7 @@ const defaultUrl = process.env.VERCEL_URL
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "golden tikkee",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  description: "Your express ride into any event.",
 };
 
 const geistSans = Geist({
@@ -61,7 +61,7 @@ export default function RootLayout({
               </div>
 
               {/* footer */}
-              <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
+              <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-12">
                 <p>
                   Powered by{" "}
                   <a
