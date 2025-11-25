@@ -42,9 +42,6 @@ async function SuccessContent({ searchParams }: SuccessPageProps) {
 
     return (
       <section id="success" className="flex flex-col gap-4">
-        <pre className="text-xs font-mono p-3 rounded border max-h-64 w-full overflow-auto">
-          {JSON.stringify(session, null, 2)}
-        </pre>
         <p>
           Thank you for your purchase. A confirmation email will be sent to{" "}
           <em>{customerEmail}</em>.

@@ -1,4 +1,3 @@
-import { InfoIcon } from "lucide-react";
 import Link from "next/link";
 
 import CheckoutButton from "@/components/checkout-button";
