@@ -89,7 +89,7 @@ export default function TicketCarousel({ tickets }: TicketCarouselProps) {
     <div className="w-full overflow-hidden rounded-xl border shadow-sm">
       <Carousel
         setApi={setApi}
-        opts={{ loop: true, align: "start" }}
+        opts={{ loop: true, align: "center" }}
         className="w-full"
       >
         {/* header */}
@@ -102,7 +102,7 @@ export default function TicketCarousel({ tickets }: TicketCarouselProps) {
               <span className="text-lg font-semibold">
                 Ticket {currentIndex + 1} of {totalTickets}
               </span>
-              <Badge variant="secondary" className="bg-green-600">
+              <Badge variant="secondary" className="bg-green-400">
                 {currentTicket?.status
                   ? currentTicket?.status.toUpperCase()
                   : "VALID"}
