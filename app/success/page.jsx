@@ -56,9 +56,9 @@ async function SuccessContent({ searchParams }) {
 
         {/* return home */}
         <div className="flex w-full justify-center">
-          <Link href="/">
-            <Button>Return to Home</Button>
-          </Link>
+          <Button asChild>
+            <Link href="/">Return to Home</Link>
+          </Button>
         </div>
       </section>
     );
