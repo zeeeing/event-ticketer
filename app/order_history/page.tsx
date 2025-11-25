@@ -7,7 +7,7 @@ import { fetchOrdersByUser } from "@/lib/stripe";
 
 export default function OrderHistoryPage() {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 w-full">
       <h1 className="text-3xl font-semibold">Order History</h1>
       <Suspense fallback={<p>Loading order history...</p>}>
         <OrderHistoryContent />
