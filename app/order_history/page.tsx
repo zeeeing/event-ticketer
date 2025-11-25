@@ -59,9 +59,9 @@ async function OrderHistoryContent() {
             const paymentStatus = session.payment_status;
             const receiptEmail =
               session.customer_details?.email || "Not specified";
-            const paymentMethod =
-              Object.keys(session?.payment_method_options || {})[0] ||
-              "Unknown";
+            const paymentMethod = (
+              Object.keys(session?.payment_method_options || {})[0] || "Unknown"
+            ).toUpperCase();
 
             return (
               <article
@@ -89,7 +89,7 @@ async function OrderHistoryContent() {
                 <div className="flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:gap-4">
                   <p>Receipt sent to {receiptEmail}</p>
                   <p className="text-xs sm:text-sm">
-                    Payment method: {paymentMethod.toUpperCase()}
+                    Payment method: {paymentMethod}
                   </p>
                 </div>
               </article>

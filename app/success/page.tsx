@@ -5,7 +5,11 @@ import { stripe } from "@/lib/stripe";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export default function SuccessPage({ searchParams }) {
+type SuccessPageProps = {
+  searchParams: { session_id?: string | string[] };
+};
+
+export default function SuccessPage({ searchParams }: SuccessPageProps) {
   return (
     <Suspense
       fallback={<section id="success">Loading your receipt...</section>}
@@ -15,24 +19,29 @@ export default function SuccessPage({ searchParams }) {
   );
 }
 
-async function SuccessContent({ searchParams }) {
-  const { session_id } = await searchParams;
+async function SuccessContent({ searchParams }: SuccessPageProps) {
+  const sessionIdParam = searchParams?.session_id;
+  const sessionId = Array.isArray(sessionIdParam)
+    ? sessionIdParam[0]
+    : sessionIdParam;
 
-  if (!session_id) {
+  if (!sessionId) {
     throw new Error("Please provide a valid session_id (`cs_test_...`)");
   }
 
-  const session = await stripe.checkout.sessions.retrieve(session_id);
+  const session = await stripe.checkout.sessions.retrieve(sessionId);
 
   if (session.status === "open") {
     return redirect("/");
   }
 
   if (session.status === "complete") {
-    const customerEmail = session?.customer_details?.email;
-    const orderStatus = session?.payment_status;
-    const paymentMethod =
-      Object.keys(session?.payment_method_options)[0] || "Unknown";
+    const customerEmail = session?.customer_details?.email ?? "your email";
+    const orderStatus =
+      session?.payment_status?.toUpperCase() ?? "UNKNOWN STATUS";
+    const paymentMethod = (
+      Object.keys(session?.payment_method_options || {})[0] || "Unknown"
+    ).toUpperCase();
 
     return (
       <section id="success" className="flex flex-col gap-4">
@@ -41,7 +50,7 @@ async function SuccessContent({ searchParams }) {
         </pre>
         <p>
           Thank you for your purchase. A confirmation email will be sent to{" "}
-          {<em>{customerEmail}</em> || "your email"}.
+          <em>{customerEmail}</em>.
           <br />
           <br />
           If you have any questions, please email{" "}
@@ -50,8 +59,8 @@ async function SuccessContent({ searchParams }) {
           </a>
         </p>
         <div className="flex flex-col p-3 rounded border">
-          <p>Order Status: {orderStatus.toUpperCase()}</p>
-          <p>Payment Method: {paymentMethod.toUpperCase()}</p>
+          <p>Order Status: {orderStatus}</p>
+          <p>Payment Method: {paymentMethod}</p>
         </div>
 
         {/* return home */}
