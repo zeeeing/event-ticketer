@@ -55,7 +55,7 @@ async function SuccessContent({ searchParams }: SuccessPageProps) {
           <br />
           If you have any questions, please email{" "}
           <a href="mailto:orders@example.com">
-            <span className="underline">orders@example.com</span>.
+            <span className="underline">zingafication@gmail.com</span>.
           </a>
         </p>
         <div className="flex flex-col p-3 rounded border">
