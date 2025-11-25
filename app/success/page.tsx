@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 type SuccessPageProps = {
-  searchParams: { session_id?: string | string[] };
+  searchParams: Promise<{ session_id?: string }>;
 };
 
 export default function SuccessPage({ searchParams }: SuccessPageProps) {
@@ -20,10 +20,7 @@ export default function SuccessPage({ searchParams }: SuccessPageProps) {
 }
 
 async function SuccessContent({ searchParams }: SuccessPageProps) {
-  const sessionIdParam = searchParams?.session_id;
-  const sessionId = Array.isArray(sessionIdParam)
-    ? sessionIdParam[0]
-    : sessionIdParam;
+  const { session_id: sessionId } = await searchParams;
 
   if (!sessionId) {
     throw new Error("Please provide a valid session_id (`cs_test_...`)");
